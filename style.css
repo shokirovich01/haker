@@ -1,0 +1,43 @@
+#terminal{
+position:absolute;
+bottom:20px;
+left:20px;
+color:#00ff66;
+font-size:18px;
+font-family:monospace;
+text-shadow:0 0 10px #00ff66;
+}
+
+#skull{
+position:absolute;
+top:20%;
+left:50%;
+transform:translateX(-50%);
+font-size:120px;
+color:#00ff66;
+opacity:0;
+text-shadow:
+0 0 20px #00ff66,
+0 0 50px #00ff66;
+transition:0.5s;
+}
+
+.glitch{
+animation:glitch .2s infinite;
+}
+
+@keyframes glitch{
+
+0%{
+transform:translate(2px,0);
+}
+
+50%{
+transform:translate(-2px,2px);
+}
+
+100%{
+transform:translate(2px,-2px);
+}
+
+}
