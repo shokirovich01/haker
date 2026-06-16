@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Hacker</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+<div id="terminal">
+> Initializing...
+</div>
+
+<div id="skull">☠</div>
+  
+  body{
+overflow:hidden;
+background:#000;
+font-family:monospace;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+}
+
+#title{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:70px;
+font-weight:bold;
+color:#00ff66;
+text-shadow:
+0 0 10px #00ff66,
+0 0 20px #00ff66,
+0 0 40px #00ff66;
+letter-spacing:8px;
+display:flex;
+cursor:default;
+z-index:10;
+}
+
+.letter{
+display:inline-block;
+transition:0.4s;
+}
+
+#access{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:80px;
+color:#00ff66;
+opacity:0;
+text-shadow:
+0 0 20px #00ff66,
+0 0 50px #00ff66;
+z-index:20;
+}
+
+.show{
+animation:accessAnim 2s forwards;
+}
+
+@keyframes accessAnim{
+
+0%{
+opacity:0;
+transform:translate(-50%,-50%) scale(0.5);
+}
+
+50%{
+opacity:1;
+transform:translate(-50%,-50%) scale(1.2);
+}
+
+100%{
+opacity:0;
+transform:translate(-50%,-50%) scale(1);
+}
+
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div id="title"></div>
+
+<div id="access">
+ACCESS GRANTED
+</div>
+
+<script>
+
+/* MATRIX */
+
+const canvas =
+document.getElementById("matrix");
+
+const ctx =
+canvas.getContext("2d");
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
+
+const chars =
+"アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+const fontSize = 16;
+
+const columns =
+canvas.width / fontSize;
+
+const drops = [];
+
+for(let i=0;i<columns;i++){
+drops[i]=1;
+}
+
+function draw(){
+
+ctx.fillStyle=
+"rgba(0,0,0,0.05)";
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.fillStyle="#00ff66";
+
+ctx.font=
+fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+const text =
+chars[
+Math.floor(
+Math.random()*chars.length
+)
+];
+
+ctx.fillText(
+text,
+i*fontSize,
+drops[i]*fontSize
+);
+
+if(
+drops[i]*fontSize >
+canvas.height &&
+Math.random()>0.975
+){
+drops[i]=0;
+}
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,33);
+
+/* TITLE */
+
+const word =
+"SHOKIROVICH";
+
+const title =
+document.getElementById("title");
+
+word.split("").forEach(letter=>{
+
+const span =
+document.createElement("span");
+
+span.className="letter";
+
+span.textContent=letter;
+
+title.appendChild(span);
+
+});
+
+/* MOUSE REPEL */
+
+document.addEventListener(
+"mousemove",
+e=>{
+
+document
+.querySelectorAll(".letter")
+.forEach(letter=>{
+
+const rect =
+letter.getBoundingClientRect();
+
+const x =
+rect.left+rect.width/2;
+
+const y =
+rect.top+rect.height/2;
+
+const dx =
+e.clientX-x;
+
+const dy =
+e.clientY-y;
+
+const dist =
+Math.sqrt(dx*dx+dy*dy);
+
+if(dist<120){
+
+const angle =
+Math.atan2(dy,dx);
+
+const force =
+(120-dist)/6;
+
+letter.style.transform=
+`translate(${-Math.cos(angle)*force}px,
+${-Math.sin(angle)*force}px)`;
+
+}
+else{
+
+letter.style.transform=
+"translate(0,0)";
+
+}
+
+});
+
+});
+
+/* ENTER */
+
+const access =
+document.getElementById("access");
+
+document.addEventListener(
+"keydown",
+e=>{
+
+if(e.key==="Enter"){
+
+access.classList.remove(
+"show"
+);
+
+setTimeout(()=>{
+
+access.classList.add(
+"show"
+);
+
+},50);
+
+}
+
+}
+);
+
+/* RESIZE */
+
+window.addEventListener(
+"resize",
+()=>{
+
+canvas.width=
+window.innerWidth;
+
+canvas.height=
+window.innerHeight;
+
+}
+);
+
+</script>
+
+</body>
+</html>
